@@ -1,18 +1,18 @@
-import urllib
+from urllib.request import urlopen
 import os
-import ConfigParser
-import Queue
+import configparser
+import queue
 import re
 import getopt
 import sys
 from classes.fetcher import Fetcher
 
 # load configs
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.readfp(open('config.ini'))
 
 # initialize variables / set defaults
-queue = Queue.Queue()
+queue = queue.Queue()
 YEAR = False
 threads = []
 num_threads = config.getint('download', 'num_threads')
@@ -62,7 +62,7 @@ if config.getboolean('download', 'dl_eventfiles'):
     # parse retrosheet page for files and add urls to the queue
     retrosheet_url = config.get('retrosheet', 'eventfiles_url')
     pattern = r'(\d{4}?)eve\.zip'
-    html = urllib.urlopen(retrosheet_url).read()
+    html = urlopen(retrosheet_url).read()
     matches = re.finditer(pattern, html, re.S)
     for match in matches:
     
@@ -89,7 +89,7 @@ if config.getboolean('download', 'dl_gamelogs'):
     # parse retrosheet page for files and add urls to the queue
     retrosheet_url = config.get('retrosheet', 'gamelogs_url')
     pattern = r'gl(\d{4})\.zip'
-    html = urllib.urlopen(retrosheet_url).read()
+    html = urlopen(retrosheet_url).read()
     matches = re.finditer(pattern, html, re.S)
     for match in matches:
     

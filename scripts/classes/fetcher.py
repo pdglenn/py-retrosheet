@@ -1,4 +1,4 @@
-import urllib
+from urllib.request import urlretrieve
 import os
 import threading
 from queue import Queue
@@ -35,7 +35,7 @@ class Fetcher(threading.Thread):
             f = "%s/%s" % (self.path, filename)
             
             # save file
-            urllib.urlretrieve(url, f)
+            urlretrieve(url, f)
 
             # is this a zip file?
             if (zipfile.is_zipfile(f)):

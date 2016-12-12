@@ -61,7 +61,7 @@ if config.getboolean('download', 'dl_eventfiles'):
 
     # parse retrosheet page for files and add urls to the queue
     retrosheet_url = config.get('retrosheet', 'eventfiles_url')
-    pattern = r'(\d{4}?)eve\.zip'
+    pattern = b'(\d{4}?)eve\.zip'
     html = urlopen(retrosheet_url).read()
     matches = re.finditer(pattern, html, re.S)
     for match in matches:

@@ -71,7 +71,7 @@ if config.getboolean('download', 'dl_eventfiles'):
             continue
         
         # compile absolute url and add to queue
-        url = 'http://www.retrosheet.org/events/%seve.zip' % match.group(1)
+        url = 'http://www.retrosheet.org/events/{}eve.zip'.format(match.group(1).decode('utf-8'))
         queue.put(url)
 
 #################################

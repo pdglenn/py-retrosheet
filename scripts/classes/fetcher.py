@@ -1,7 +1,8 @@
 from urllib.request import urlretrieve
 import os
 import threading
-from queue import Queue
+import multiprocessing
+import queue
 import zipfile
 
 class Fetcher(threading.Thread):
@@ -21,7 +22,8 @@ class Fetcher(threading.Thread):
             # exit if queue empty
             try:
                 url = self.queue.get_nowait()
-            except Queue.Empty:
+            except queue.Empty:
+                print('queue empty')
                 break
 
             # extract file name from url

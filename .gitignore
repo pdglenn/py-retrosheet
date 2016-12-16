@@ -2,3 +2,4 @@ scripts/files
 *.pyc
 config.ini
 /database
+scripts/retrosheet

@@ -10,6 +10,8 @@ import glob
 import re
 import getopt
 import sys
+from models import events
+import pandas as pd
 
 
 def connect(config):
@@ -120,22 +122,14 @@ def parse_events(file, conn, bound_param):
         print('cannot get year from event file %s' % file)
         return None
 
-    if conn.engine.driver == 'psycopg2':
-        conn.execute('DELETE FROM events WHERE game_id LIKE \'%%' + year + '%%\'')
-        conn.execute('COPY events FROM %s WITH CSV HEADER', file)
-        conn.execute('COMMIT')
-    else:
-        reader = csv.reader(open(file))
-        headers = reader.next()
-        for row in reader:
-            sql = 'SELECT * FROM events WHERE game_id = ? AND event_id = ?'
-            res = conn.execute(sql, [row[0], row[96]])
-            
-            if res.rowcount == 1:
-                return True
+    df = pd.DataFrame().from_csv(file)
+    df.to_sql('events', conn, if_exists='append')
+    # reader = csv.reader(open(file))
+    # headers = reader.__next__()
 
-            sql = 'INSERT INTO events(?) VALUES(?)' % (','.join(headers), ','.join([bound_param] * len(headers)))
-            conn.execute(sql, row)
+    # for row in reader:
+    #     values = dict(zip(headers, row))
+    #     conn.execute(events.insert(), values)
 
 
 def main():
@@ -157,7 +151,7 @@ def main():
     years       = []
     opts, args  = getopt.getopt(sys.argv[1:], "y:")
     bound_param = '?' if config.get('database', 'engine') == 'sqlite' else '%s'
-    modules     = [] #['teams', 'rosters', 'events', 'games'] # items to process
+    modules     = ['events'] #['teams', 'rosters', 'events', 'games'] # items to process
 
     if not os.path.exists(chadwick) \
         or not os.path.exists('%s/cwevent' % chadwick) \

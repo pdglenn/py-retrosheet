@@ -1,0 +1,181 @@
+def line_converter(t):
+    t = t.split(' ')
+    print(t)
+    print(t[1])
+    print('varchar' in t[1])
+    name = t[0].lower()
+    if 'varchar' in t[1]:
+        ty = 'String'
+    elif 'INTEGER' in t[1]:
+        ty = 'Integer'
+    else:
+        ty = 'Unknown'
+    return "Column('{}', {}),\n".format(name, ty)
+
+def convert_schema(schema):
+    return [line_converter(x) for x in schema.split('\n,')]
+
+schema = """
+GAME_ID varchar(12)
+,AWAY_TEAM_ID varchar(3)
+,INN_CT INTEGER
+,BAT_HOME_ID INTEGER
+,OUTS_CT INTEGER
+,BALLS_CT INTEGER
+,STRIKES_CT INTEGER
+,PITCH_SEQ_TX varchar(40)
+,AWAY_SCORE_CT INTEGER
+,HOME_SCORE_CT INTEGER
+,BAT_ID varchar(8)
+,BAT_HAND_CD varchar(1)
+,RESP_BAT_ID varchar(8)
+,BAT_ON_DECK_ID varchar(8)
+,BAT_IN_HOLD_ID varchar(8)
+,RESP_BAT_HAND_CD varchar(1)
+,PIT_ID varchar(8)
+,PIT_HAND_CD varchar(1)
+,RESP_PIT_ID varchar(8)
+,RESP_PIT_HAND_CD varchar(1)
+,POS2_FLD_ID varchar(8)
+,POS3_FLD_ID varchar(8)
+,POS4_FLD_ID varchar(8)
+,POS5_FLD_ID varchar(8)
+,POS6_FLD_ID varchar(8)
+,POS7_FLD_ID varchar(8)
+,POS8_FLD_ID varchar(8)
+,POS9_FLD_ID varchar(8)
+,BASE1_RUN_ID varchar(8)
+,BASE2_RUN_ID varchar(8)
+,BASE3_RUN_ID varchar(8)
+,EVENT_TX varchar(100)
+,LEADOFF_FL varchar(1)
+,PH_FL varchar(1)
+,BAT_FLD_CD INTEGER
+,BAT_LINEUP_ID INTEGER
+,EVENT_CD INTEGER
+,BAT_EVENT_FL varchar(1)
+,AB_FL varchar(1)
+,H_CD INTEGER
+,SH_FL varchar(1)
+,SF_FL varchar(1)
+,EVENT_OUTS_CT INTEGER
+,DP_FL varchar(1)
+,TP_FL varchar(1)
+,RBI_CT INTEGER
+,WP_FL varchar(1)
+,PB_FL varchar(1)
+,FLD_CD INTEGER
+,BATTEDBALL_CD varchar(1)
+,BUNT_FL varchar(1)
+,FOUL_FL varchar(1)
+,BATTEDBALL_LOC_TX varchar(5)
+,ERR_CT INTEGER
+,ERR1_FLD_CD INTEGER
+,ERR1_CD varchar(1)
+,ERR2_FLD_CD INTEGER
+,ERR2_CD varchar(1)
+,ERR3_FLD_CD INTEGER
+,ERR3_CD varchar(1)
+,BAT_DEST_ID INTEGER
+,RUN1_DEST_ID INTEGER
+,RUN2_DEST_ID INTEGER
+,RUN3_DEST_ID INTEGER
+,BAT_PLAY_TX varchar(8)
+,RUN1_PLAY_TX varchar(15)
+,RUN2_PLAY_TX varchar(15)
+,RUN3_PLAY_TX varchar(15)
+,RUN1_SB_FL varchar(1)
+,RUN2_SB_FL varchar(1)
+,RUN3_SB_FL varchar(1)
+,RUN1_CS_FL varchar(1)
+,RUN2_CS_FL varchar(1)
+,RUN3_CS_FL varchar(1)
+,RUN1_PK_FL varchar(1)
+,RUN2_PK_FL varchar(1)
+,RUN3_PK_FL varchar(1)
+,RUN1_RESP_PIT_ID varchar(8)
+,RUN2_RESP_PIT_ID varchar(8)
+,RUN3_RESP_PIT_ID varchar(8)
+,GAME_NEW_FL varchar(1)
+,GAME_END_FL varchar(1)
+,PR_RUN1_FL varchar(1)
+,PR_RUN2_FL varchar(1)
+,PR_RUN3_FL varchar(1)
+,REMOVED_FOR_PR_RUN1_ID varchar(8)
+,REMOVED_FOR_PR_RUN2_ID varchar(8)
+,REMOVED_FOR_PR_RUN3_ID varchar(8)
+,REMOVED_FOR_PH_BAT_ID varchar(8)
+,REMOVED_FOR_PH_BAT_FLD_CD INTEGER
+,PO1_FLD_CD INTEGER
+,PO2_FLD_CD INTEGER
+,PO3_FLD_CD INTEGER
+,ASS1_FLD_CD INTEGER
+,ASS2_FLD_CD INTEGER
+,ASS3_FLD_CD INTEGER
+,ASS4_FLD_CD INTEGER
+,ASS5_FLD_CD INTEGER
+,EVENT_ID INTEGER
+/* following are extended fields */
+,HOME_TEAM_ID varchar(3)
+,BAT_TEAM_ID varchar(3)
+,FLD_TEAM_ID varchar(3)
+,BAT_LAST_ID INTEGER
+,INN_NEW_FL varchar(1)
+,INN_END_FL varchar(1)
+,START_BAT_SCORE_CT INTEGER
+,START_FLD_SCORE_CT INTEGER
+,INN_RUNS_CT INTEGER
+,GAME_PA_CT INTEGER
+,INN_PA_CT INTEGER
+,PA_NEW_FL varchar(1)
+,PA_TRUNC_FL varchar(1)
+,START_BASES_CD INTEGER
+,END_BASES_CD INTEGER
+,BAT_START_FL varchar(1)
+,RESP_BAT_START_FL varchar(1)
+,PIT_START_FL varchar(1)
+,RESP_PIT_START_FL varchar(1)
+,RUN1_FLD_CD INTEGER
+,RUN1_LINEUP_CD INTEGER
+,RUN1_ORIGIN_EVENT_ID INTEGER
+,RUN2_FLD_CD INTEGER
+,RUN2_LINEUP_CD INTEGER
+,RUN2_ORIGIN_EVENT_ID INTEGER
+,RUN3_FLD_CD INTEGER
+,RUN3_LINEUP_CD INTEGER
+,RUN3_ORIGIN_EVENT_ID INTEGER
+,RUN1_RESP_CAT_ID varchar(8)
+,RUN2_RESP_CAT_ID varchar(8)
+,RUN3_RESP_CAT_ID varchar(8)
+,PA_BALL_CT INTEGER
+,PA_CALLED_BALL_CT INTEGER default 0
+,PA_INTENT_BALL_CT INTEGER
+,PA_PITCHOUT_BALL_CT INTEGER
+,PA_HITBATTER_BALL_CT INTEGER
+,PA_OTHER_BALL_CT INTEGER
+,PA_STRIKE_CT INTEGER
+,PA_CALLED_STRIKE_CT INTEGER
+,PA_SWINGMISS_STRIKE_CT INTEGER
+,PA_FOUL_STRIKE_CT INTEGER
+,PA_INPLAY_STRIKE_CT INTEGER
+,PA_OTHER_STRIKE_CT INTEGER
+,EVENT_RUNS_CT INTEGER
+,FLD_ID varchar(8)
+,BASE2_FORCE_FL varchar(1)
+,BASE3_FORCE_FL varchar(1)
+,BASE4_FORCE_FL varchar(1)
+,BAT_SAFE_ERR_FL varchar(1)
+,BAT_FATE_ID INTEGER
+,RUN1_FATE_ID INTEGER
+,RUN2_FATE_ID INTEGER
+,RUN3_FATE_ID INTEGER
+,FATE_RUNS_CT INTEGER
+,ASS6_FLD_CD INTEGER
+,ASS7_FLD_CD INTEGER
+,ASS8_FLD_CD INTEGER
+,ASS9_FLD_CD INTEGER
+,ASS10_FLD_CD INTEGER
+,UNKNOWN_OUT_EXC_FL varchar(1)
+,UNCERTAIN_PLAY_EXC_FL varchar(1)
+"""
+print(''.join(convert_schema(schema)))
